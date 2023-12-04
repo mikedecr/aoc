@@ -21,11 +21,11 @@ function keyfilter(fn::Function, d::Dict)
 end
 
 function valmap(fn::Function, d::Dict)
-    Dict(k => fn(v) for (k, v) in d)
+    Dict(zip(keys(d), fn.(values(d))))
 end
 
 function keymap(fn::Function, d::Dict)
-    Dict(fn(k) => v for (k, v) in d)
+    Dict(zip(fn.(keys(d)), values(d)))
 end
 
 
@@ -67,7 +67,7 @@ all_needles = vcat(keys(word_map)..., values(word_map)...)
 # first index of every occurrence of needle in haystack
 function begin_indices(needle, haystack)
     ranges = findall(needle, haystack)
-    return map(first, ranges)
+    return first.(ranges)
 end 
 
 function part2(input::Vector{String})
@@ -87,7 +87,7 @@ function part2(input::Vector{String})
         (convert_number ∘ only ∘ values)
     get_first_and_last = x -> [first_number(x), last_number(x)]
     f = as_integer ∘ String ∘ get_first_and_last ∘ substr_to_begins
-    sum(map(f, input))
+    return f.(input) |> sum
 end
 
 # convert words to numbers (for constructing the code)
