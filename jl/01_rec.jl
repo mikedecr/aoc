@@ -74,8 +74,8 @@ function sum_calibration_chars_and_words(file_iter)
     last_match = let
         # taking advantage of let block to contain clutter
         each_needle_reversed = reverse.(string.(needles))
-        each_line_reversed = reverse(line)
-        reversed_last_match = find_first_pattern(each_line_reversed, each_needle_reversed)
+        reversed_line = reverse(line)
+        reversed_last_match = find_first_pattern(reversed_line, each_needle_reversed)
         reverse(reversed_last_match)
     end
     # matches -> ensure chars -> one string -> int
