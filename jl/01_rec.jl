@@ -1,11 +1,15 @@
 file = "data/01/final.txt"
 
+#================#
+#=    part 1    =#
+#================#
+
 # recursive style
 # step through a file iterator
 # at each step, get the sum of first and last digits in the line
 # add the sum to the recursive call on the next line
 # terminate by returning 0 (identity) when the next line is nothing
-function sum_numbers(file_iter::Base.EachLine{IOStream})::Int
+function sum_calibration_chars(file_iter::Base.EachLine{IOStream})::Int
     line = iterate(file_iter)
     if line === nothing
         return 0
@@ -13,61 +17,76 @@ function sum_numbers(file_iter::Base.EachLine{IOStream})::Int
     digits = filter(isdigit, first(line))
     as_string = first(digits) * last(digits)
     as_number = parse(Int, as_string)
-    return as_number + sum_numbers(file_iter)
+    return as_number + sum_calibration_chars(file_iter)
 end
 
 function part1(file::String)::Int
     iterator = eachline(file)
-    sum_numbers(iterator)
+    sum_calibration_chars(iterator)
 end
 
 @assert part1("data/01/test.txt") == 142
 
-part1(file)
 
+#================#
+#=    part 2    =#
+#================#
 
-function sum_numbers_and_words(file_iter, needles)
-    line = iterate(file_iter)
-    if line === nothing
-        return 0
+# sshh just let me do this
+rest(a) = last(a, length(a) - 1)
+
+# okay this is way better.
+# this function recurses down a string, each time looking for the first matching pattern
+# we know the patterns are exclusive
+function find_first_pattern(word, patterns)
+    matches = filter(p -> startswith(word, p), patterns)
+    if isempty(matches)
+        return find_first_pattern(rest(word), patterns)
     end
-    # min of findfirst
-    firsts = Dict(minimum(k) => convert_word(v)
-                  for (k, v) in [(findfirst(n, first(line)), n) for n in needles]
-                  if k !== nothing)
-    # min of findlast
-    lasts = Dict(minimum(k) => convert_word(v)
-                  for (k, v) in [(findlast(n, first(line)), n) for n in needles]
-                  if k !== nothing)
-    # first appearing value
-    first_num = firsts[minimum(keys(firsts))]
-    # last appearing value
-    last_num = lasts[maximum(keys(lasts))]
-    # as one number
-    number = parse(Int, string(first_num) * string(last_num))
-    return number + sum_numbers_and_words(file_iter, needles)
+    return only(matches)
 end
 
-needles = let
-    words = "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
-    vcat(words..., range('1', '9'))
-end
+number_words = "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
+number_chars = range('1', '9')
+needles = vcat(number_words..., string.(number_chars)...)
 
 function convert_word(input)
-    words = "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
-    nums = range('1', '9')
-    d = Dict(zip(words, nums))
-    if input ∈ values(d)
-        out = parse(Int, input)
+    d = Dict(zip(number_words, number_chars))
+    if (length(input) == 1) && (only(input) ∈ values(d))
+        return only(input)
     else
-        out = parse(Int, d[input])
+        return only(d[input])
     end
-    return out
+end
+
+# we use these to walk fwd down the string and "backward" down the reversed string
+# looking for matches forward and then backward, hell yeah B|
+
+function sum_calibration_chars_and_words(file_iter)
+    line_item = iterate(file_iter)
+    if isnothing(line_item)
+        return 0
+    end
+    line = first(line_item)
+    # walk down the line, look for matches
+    first_match = find_first_pattern(line, needles)
+    # walk "up" the reversed line for reversed matches, reverse the detected match
+    last_match = let
+        # taking advantage of let block to contain clutter
+        each_needle_reversed = reverse.(string.(needles))
+        each_line_reversed = reverse(line)
+        reversed_last_match = find_first_pattern(each_line_reversed, each_needle_reversed)
+        reverse(reversed_last_match)
+    end
+    # matches -> ensure chars -> one string -> int
+    s = String(convert_word.([first_match, last_match]))
+    n = parse(Int, s)
+    n + sum_calibration_chars_and_words(file_iter)
 end
 
 function part2(file)
     iterator = eachline(file)
-    sum_numbers_and_words(iterator, needles)
+    sum_calibration_chars_and_words(iterator)
 end
 
 @assert part2("data/01/test2.txt") == 281
