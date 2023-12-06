@@ -35,17 +35,6 @@ end
 # sshh just let me do this
 rest(a) = last(a, length(a) - 1)
 
-# okay this is way better.
-# this function recurses down a string, each time looking for the first matching pattern
-# we know the patterns are exclusive
-function find_first_pattern(word, patterns)
-    matches = filter(p -> startswith(word, p), patterns)
-    if isempty(matches)
-        return find_first_pattern(rest(word), patterns)
-    end
-    return only(matches)
-end
-
 number_words = "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
 number_chars = range('1', '9')
 needles = vcat(number_words..., string.(number_chars)...)
@@ -57,6 +46,17 @@ function convert_word(input)
     else
         return only(d[input])
     end
+end
+
+# okay this is way better.
+# this function recurses down a string, each time looking for the first matching pattern
+# we know the patterns are exclusive
+function find_first_pattern(word, patterns)
+    matches = filter(p -> startswith(word, p), patterns)
+    if isempty(matches)
+        return find_first_pattern(rest(word), patterns)
+    end
+    return only(matches)
 end
 
 # we use these to walk fwd down the string and "backward" down the reversed string
