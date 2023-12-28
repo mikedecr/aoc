@@ -1,11 +1,11 @@
-using Memoize
+using Memoization
 
 function convert_line(line::String)::Vector{Int}
-    map(c -> parse(Int, c), split(line))
+    line |> split .|> (s -> parse(Int, s))
 end
 
 # double-sided extrapolation
-@memoize function extrapolate_history(x::Vector{Int})::Tuple{Int, Int}
+function extrapolate_history(x::Vector{Int})::Tuple{Int, Int}
     dx::Vector{Int} = diff(x)
     if dx == zeros(length(dx))
         return first(x), last(x)
@@ -17,15 +17,13 @@ end
 
 # part one gets the "last" element of the extrapolation
 function part_one(input::Vector{String})::Int
-    histories = convert_line.(input)
-    extraps = extrapolate_history.(histories)
+    extraps = input .|> convert_line .|> extrapolate_history
     map(last, extraps) |> sum
 end
 
 # part two gets the "first" element of the extrapolation
 function part_two(input::Vector{String})::Int
-    histories = convert_line.(input)
-    extraps = extrapolate_history.(histories)
+    extraps = input .|> convert_line .|> extrapolate_history
     map(first, extraps) |> sum
 end
 

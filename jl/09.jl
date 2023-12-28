@@ -1,5 +1,5 @@
 function convert_line(line::String)::Vector{Int}
-    map(c -> parse(Int, c), split(line))
+    line |> split .|> (s -> parse(Int, s))
 end
 
 #===============#
