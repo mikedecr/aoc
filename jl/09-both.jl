@@ -7,7 +7,7 @@ end
 # for some x, extrapolate both ends of the sequence
 # return the first and last of extrapolated sequence
 function extrapolate_history(x::Vector{Int})::Tuple{Int, Int}
-    dx::Vector{Int} = diff(x)
+    dx = diff(x)
     # bottom case terminates recursion
     # otherwise extrapolate current layer using lower layer info
     if dx == zeros(length(dx))
