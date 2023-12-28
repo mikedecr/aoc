@@ -1,12 +1,17 @@
 using Memoization
 
+# string containing ints -> Vector{Int}
+# "14 57 98" -> [14, 57, 98]
 function convert_line(line::String)::Vector{Int}
     line |> split .|> (s -> parse(Int, s))
 end
 
-# double-sided extrapolation
+# for some x, extrapolate both ends of the sequence
+# return the first and last of extrapolated sequence
 function extrapolate_history(x::Vector{Int})::Tuple{Int, Int}
     dx::Vector{Int} = diff(x)
+    # bottom case terminates recursion
+    # otherwise extrapolate current layer using lower layer info
     if dx == zeros(length(dx))
         return first(x), last(x)
     else
@@ -15,16 +20,16 @@ function extrapolate_history(x::Vector{Int})::Tuple{Int, Int}
     end
 end
 
-# part one gets the "last" element of the extrapolation
+# part one cares about the last element of extended sequence
 function part_one(input::Vector{String})::Int
     extraps = input .|> convert_line .|> extrapolate_history
-    map(last, extraps) |> sum
+    return extraps .|> last |> sum
 end
 
-# part two gets the "first" element of the extrapolation
+# part two cares about the first element of extended sequence
 function part_two(input::Vector{String})::Int
     extraps = input .|> convert_line .|> extrapolate_history
-    map(first, extraps) |> sum
+    return extraps .|> first |> sum
 end
 
 @assert part_one(readlines("data/09/test.txt")) == 114
