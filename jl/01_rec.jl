@@ -9,15 +9,17 @@ file = "data/01/final.txt"
 # at each step, get the sum of first and last digits in the line
 # add the sum to the recursive call on the next line
 # terminate by returning 0 (identity) when the next line is nothing
-function sum_calibration_chars(file_iter::Base.EachLine{IOStream})::Int
-    line = iterate(file_iter)
-    if line === nothing
+function sum_calibration_chars(file_iter)::Int
+    # this still seems clunky
+    peeled = Iterators.peel(file_iter)
+    if peeled === nothing
         return 0
     end
-    digits = filter(isdigit, first(line))
+    line, rest = peeled
+    digits = filter(isdigit, line)
     as_string = first(digits) * last(digits)
     as_number = parse(Int, as_string)
-    return as_number + sum_calibration_chars(file_iter)
+    return as_number + sum_calibration_chars(rest)
 end
 
 function part1(file::String)::Int
@@ -63,11 +65,11 @@ end
 # looking for matches forward and then backward, hell yeah B|
 
 function sum_calibration_chars_and_words(file_iter)
-    line_item = iterate(file_iter)
-    if isnothing(line_item)
+    peeled = Iterators.peel(file_iter)
+    if isnothing(peeled)
         return 0
     end
-    line = first(line_item)
+    line, rest = peeled
     # walk down the line, look for matches
     first_match = find_first_pattern(line, needles)
     # walk "up" the reversed line for reversed matches, reverse the detected match
@@ -81,7 +83,7 @@ function sum_calibration_chars_and_words(file_iter)
     # matches -> ensure chars -> one string -> int
     s = String(convert_word.([first_match, last_match]))
     n = parse(Int, s)
-    n + sum_calibration_chars_and_words(file_iter)
+    n + sum_calibration_chars_and_words(rest)
 end
 
 function part2(file)
