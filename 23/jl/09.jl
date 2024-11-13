@@ -19,8 +19,8 @@ function part_one(input::Vector{String})::Int
     return sum(extend_history.(histories))
 end
 
-@assert part_one(readlines("data/09/test.txt")) == 114
-println("Part 1: ", part_one(readlines("data/09/final.txt")))
+@assert part_one(readlines("23/data/09/test.txt")) == 114
+println("Part 1: ", part_one(readlines("23/data/09/final.txt")))
 
 #================#
 #=    second    =#
