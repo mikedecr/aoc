@@ -1,0 +1,12 @@
+name: aoc
+channels:
+    - https://artifacts.drwholdings.com/artifactory/anaconda-conda-forge-conda-remote
+dependencies:
+    # python
+    - python=3.11
+    - ipython
+    - toolz
+    - numpy
+    # julia
+    - julia
+
