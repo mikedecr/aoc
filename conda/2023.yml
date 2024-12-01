@@ -1,6 +1,6 @@
-name: aoc
+name: aoc2023
 channels:
-    - https://artifacts.drwholdings.com/artifactory/anaconda-conda-forge-conda-remote
+    - conda-forge
 dependencies:
     # python
     - python=3.11
