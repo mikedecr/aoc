@@ -1,0 +1,9 @@
+name: aoc2024
+channels:
+  - conda-forge
+dependencies:
+  - python == 3.12.*
+  - ipython
+  - toolz
+  - numpy
+
