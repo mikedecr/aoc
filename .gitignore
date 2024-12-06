@@ -5,3 +5,4 @@ build/envs/aoc2024
 .pixi
 *.egg-info
 tools/aoc-data/src/aoc_data/__pycache__
+pixi.lock
