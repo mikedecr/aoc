@@ -30,10 +30,9 @@ part_one: Function[Path, int] = lambda filepath: \
         for seq in open(filepath).read().splitlines())
 
 # pt 2 with good ol sequence operations
-take: Function[[int, List], List] = lambda index, lst: lst[:index]
-drop: Function[[int, List], List] = lambda index, lst: lst[index:]
-remove_nth: Function[[int, List], List] = lambda index, lst: \
-    take(index, lst) + drop(index + 1, lst)
+take: Function[[int, List], List] = lambda ind, lst: lst[:ind]
+drop: Function[[int, List], List] = lambda ind, lst: lst[ind:]
+remove_nth: Function[[int, List], List] = lambda ind, lst: take(ind, lst) + drop(ind + 1, lst)
 
 # test if any variation of the sequence is good
 is_good_report_flexible: Function[List[int], bool] = lambda levels: \
