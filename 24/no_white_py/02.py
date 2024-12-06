@@ -1,6 +1,5 @@
 """
-No-Significant-Whitespace Python.
-Not even function defs!
+No-Significant-Whitespace Python. Not even function defs!
 """
 
 import itertools
