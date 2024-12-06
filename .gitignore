@@ -1,1 +1,7 @@
+data
 build/envs/aoc2024
+
+# pixi environments
+.pixi
+*.egg-info
+tools/aoc-data/src/aoc_data/__pycache__

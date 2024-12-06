@@ -1,0 +1,8 @@
+[project]
+name = "aoc-data"
+version = "0.1.0"
+
+
+[project.scripts]
+aoc-data = "aoc_data.app:app"
+

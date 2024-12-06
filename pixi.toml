@@ -1,0 +1,23 @@
+[project]
+authors = ["mikedecr <mgdecrescenzo@gmail.com>"]
+channels = ["conda-forge"]
+description = "Add a short description here"
+name = "aoc"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.12.*"
+ipython = ">=8.30.0,<9"
+toolz = ">=1.0.0,<2"
+pip = ">=24.3.1,<25"
+typer = ">=0.15.0,<0.16"
+uv = ">=0.5.6,<0.6"
+
+[pypi-dependencies]
+advent-of-code-data = "*"
+aoc-data = { path = "tools/aoc-data", editable = true }
+
+
