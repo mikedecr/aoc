@@ -1,0 +1,18 @@
+[project]
+name = "py"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ipython>=9.8.0",
+    "toolz>=1.1.0",
+    "typer>=0.21.0",
+]
+
+[tool.uv]
+package = true
+
+
+[project.scripts]
+aoc = "aoc25.app:app"
