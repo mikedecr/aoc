@@ -16,12 +16,12 @@ def day_2_1(test: Flag("--test") = False):
     for product_range in text.split(","):
         begin, end = product_range.split("-")
         for number in range(int(begin), int(end) + 1):
-            if len(str(number)) % 2 != 0:
-                continue
-            half = int(len(str(number)) / 2)
             string = str(number)
-            fst, snd = string[0:half], string[half:]
-            if fst == snd:
+            if len(string) % 2 != 0:
+                continue
+            half = int(len(string) / 2)
+            splits = partition(half, string)
+            if len(set(splits)) == 1:
                 result += number
     print("solution:", result)
 
