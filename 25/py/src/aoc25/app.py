@@ -17,3 +17,7 @@ def Data(day: int, test: bool = False) -> Path:
 
 def Flag(*args, **kwargs):
     return Annotated[bool, Option(*args, **kwargs)]
+
+
+def ReqOption(type_, *args, **kwargs):
+    return Annotated[type_, Option(*args, **kwargs)]
