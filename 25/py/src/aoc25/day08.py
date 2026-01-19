@@ -1,12 +1,13 @@
+import itertools
 from dataclasses import dataclass
 from functools import reduce
-import itertools
 from operator import mul
 from pathlib import Path
 
 import numpy as np
 from rich import print
-from .app import app, Flag, Data
+
+from .app import Data, Flag, app
 
 
 @dataclass
