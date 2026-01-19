@@ -23,7 +23,7 @@ class Box:
 
     @classmethod
     def from_str(cls, s: str) -> "Box":
-        """ 'x,y,z' -> Box(x, y, z) """
+        """'x,y,z' -> Box(x, y, z)"""
         chars = s.strip().split(",")
         ints = map(int, chars)
         return cls(*ints)
@@ -37,9 +37,10 @@ class Box:
 
 # this is just a set of Boxes
 class Circuit(set):
-
     def __init__(self, points: set[Box]):
-        assert all(isinstance(pt, Box) for pt in points), "Circuit must be a set of Boxes"
+        assert all(isinstance(pt, Box) for pt in points), (
+            "Circuit must be a set of Boxes"
+        )
         super().__init__(points)
 
 
@@ -78,19 +79,14 @@ def day_8_1(test: Flag("--test") = False):
     points: list[Box] = [Box.from_str(line) for line in open(data_path, "r")]
     ordered_connections: list[set[Box]] = sorted(
         map(set, itertools.combinations(points, r=2)),
-        key = lambda pair: Box.compute_distance(*pair)
+        key=lambda pair: Box.compute_distance(*pair),
     )
-    circuits: CircuitNetwork = CircuitNetwork(
-        [Circuit({pt}) for pt in points]
-    )
+    circuits: CircuitNetwork = CircuitNetwork([Circuit({pt}) for pt in points])
     for _ in range(10 if test else 1000):
         a, b = ordered_connections.pop(0)
         if circuits.contains_link(a, b):
             continue
-        circuits.attach(
-            circuits.get_circuit(a),
-            circuits.get_circuit(b)
-        )
+        circuits.attach(circuits.get_circuit(a), circuits.get_circuit(b))
     largest_3_circuit_sizes = sorted(circuits.map(len))[-3:]
     result = reduce(mul, largest_3_circuit_sizes)
     print("solution:", result)
@@ -103,21 +99,16 @@ def day_8_2(test: Flag("--test") = False):
     points: list[Box] = [Box.from_str(line) for line in open(data_path, "r")]
     ordered_connections: list[set[Box]] = sorted(
         map(set, itertools.combinations(points, r=2)),
-        key = lambda pair: Box.compute_distance(*pair)
+        key=lambda pair: Box.compute_distance(*pair),
     )
-    circuits: CircuitNetwork = CircuitNetwork(
-        [Circuit({pt}) for pt in points]
-    )
+    circuits: CircuitNetwork = CircuitNetwork([Circuit({pt}) for pt in points])
     while ordered_connections:
         possible = ordered_connections.pop(0)
         if circuits.contains_link(*possible):
             continue
         # we need to persist these assignments if they are a new link
         a, b = possible
-        circuits.attach(
-            circuits.get_circuit(a),
-            circuits.get_circuit(b)
-        )
+        circuits.attach(circuits.get_circuit(a), circuits.get_circuit(b))
     result = a.x * b.x
     print("solution:", result)
 
