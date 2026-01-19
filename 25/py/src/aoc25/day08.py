@@ -28,8 +28,8 @@ class Box:
         ints = map(int, chars)
         return cls(*ints)
 
-    @classmethod
-    def compute_distance(cls, a: "Box", b: "Box") -> float:
+    @staticmethod
+    def compute_distance(a: "Box", b: "Box") -> float:
         a_arr = np.array(a.to_tuple())
         b_arr = np.array(b.to_tuple())
         return np.linalg.norm(a_arr - b_arr)
